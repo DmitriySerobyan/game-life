@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Game "Life"</title>
+</head>
+
+<body>
+  <canvas id="game"></canvas>
+  <script>
+
+    function generateColor() {
+      return '#' + Math.floor(Math.random() * 16777215).toString(16)
+    }
+
+    class Game {
+      constructor() {
+        this.cellSize = 10
+        this.cellNumberX = 100
+        this.cellNumberY = 100
+        this.canvas = document.getElementById('game')
+        this.ctx = this.canvas.getContext('2d')
+      }
+
+      init() {
+        this.canvas.setAttribute("width", this.cellNumberX * this.cellSize)
+        this.canvas.setAttribute("height", this.cellNumberY * this.cellSize)
+      }
+
+      draw() {
+        for (let cellX = 0; cellX < this.cellNumberX; cellX++) {
+          for (let cellY = 0; cellY < this.cellNumberY; cellY++) {
+            this.ctx.fillStyle = 'black'
+            this.ctx.fillRect(cellY * this.cellSize, cellX * this.cellSize, this.cellSize, this.cellSize)
+            this.ctx.fillStyle = generateColor()
+            this.ctx.fillRect(cellY * this.cellSize + 1, cellX * this.cellSize + 1, this.cellSize - 1, this.cellSize - 1)
+          }
+        }
+      }
+    }
+
+    const game = new Game()
+    game.init()
+    game.draw()
+  </script>
+</body>
+
+</html>
