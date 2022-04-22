@@ -46,13 +46,13 @@
 
       start() {
         setInterval(() => {
-          game.updateArea()
+          game.update()
           game.clear()
           game.draw()
         }, this.updateInterval);
       }
 
-      updateArea() {
+      update() {
         const newArea = Array(this.cellNumberX).fill(false).map(() => Array(this.cellNumberY).fill(false))
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
