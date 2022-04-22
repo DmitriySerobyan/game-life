@@ -26,7 +26,7 @@
     class Game {
       constructor() {
         this.cellSize = 10
-        this.initCellProbability = 0.3
+        this.initCellProbability = 0.5
         this.updateInterval = 100
         this.canvas = document.getElementById('game')
         this.canvas.width = window.innerWidth
@@ -116,8 +116,12 @@
       }
 
       drawCell(x, y) {
-        this.ctx.fillStyle = 'black'
+        this.ctx.fillStyle = this.generateColor()
         this.ctx.fillRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize)
+      }
+
+      generateColor() {
+        return '#' + Math.floor(Math.random() * 16777215).toString(16)
       }
     }
 
