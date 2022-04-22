@@ -17,15 +17,17 @@
         this.cellSize = 10
         this.cellNumberX = 100
         this.cellNumberY = 100
+        this.canvasWidth = this.cellNumberX * this.cellSize
+        this.canvasHeight = this.cellNumberY * this.cellSize
         this.canvas = document.getElementById('game')
         this.ctx = this.canvas.getContext('2d')
-        this.area = Array(this.cellNumberX).fill(false).map(() => Array(this.cellNumberY).fill(false));
+        this.area = Array(this.cellNumberX).fill(false).map(() => Array(this.cellNumberY).fill(false))
       }
 
       init() {
-        this.canvas.setAttribute("width", this.cellNumberX * this.cellSize)
-        this.canvas.setAttribute("height", this.cellNumberY * this.cellSize)
-        const initCellProbability = 0.25
+        this.canvas.setAttribute("width", this.canvasWidth)
+        this.canvas.setAttribute("height", this.canvasHeight)
+        const initCellProbability = 0.3
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
             if (Math.random() < initCellProbability) {
@@ -36,7 +38,22 @@
       }
 
       update() {
-
+        const newArea = Array(this.cellNumberX).fill(false).map(() => Array(this.cellNumberY).fill(false))
+        for (let x = 0; x < this.cellNumberX; x++) {
+          for (let y = 0; y < this.cellNumberY; y++) {
+            const neighboursCount = this.countNeighbours(x, y)
+            if (this.area[x][y]) {
+              if ([2, 3].includes(neighboursCount)) {
+                newArea[x][y] = true
+              }
+            } else {
+              if (neighboursCount == 3) {
+                newArea[x][y] = true
+              }
+            }
+          }
+        }
+        this.area = newArea
       }
 
       countNeighbours(x, y) {
@@ -69,11 +86,12 @@
       }
 
       draw() {
+        this.ctx.fillStyle = 'white'
+        this.ctx.fillRect(0, 0, this.canvasHeight, this.canvasWidth)
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
             if (this.area[x][y]) {
               this.drawCell(x, y)
-              console.log(this.countNeighbours(x, y))
             }
           }
         }
@@ -87,7 +105,10 @@
 
     const game = new Game()
     game.init()
-    game.draw()
+    setInterval(() => {
+      game.update()
+      game.draw()
+    }, 100);
   </script>
 </body>
 
