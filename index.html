@@ -32,14 +32,18 @@
       }
 
       draw() {
-        for (let cellX = 0; cellX < this.cellNumberX; cellX++) {
-          for (let cellY = 0; cellY < this.cellNumberY; cellY++) {
-            this.ctx.fillStyle = 'black'
-            this.ctx.fillRect(cellY * this.cellSize, cellX * this.cellSize, this.cellSize, this.cellSize)
-            this.ctx.fillStyle = generateColor()
-            this.ctx.fillRect(cellY * this.cellSize + 1, cellX * this.cellSize + 1, this.cellSize - 1, this.cellSize - 1)
+        for (let x = 0; x < this.cellNumberX; x++) {
+          for (let y = 0; y < this.cellNumberY; y++) {
+            this.drawCell(x, y)
           }
         }
+      }
+
+      drawCell(x, y) {
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(y * this.cellSize, x * this.cellSize, this.cellSize, this.cellSize)
+        this.ctx.fillStyle = generateColor()
+        this.ctx.fillRect(y * this.cellSize + 1, x * this.cellSize + 1, this.cellSize - 1, this.cellSize - 1)
       }
     }
 
