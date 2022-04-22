@@ -12,11 +12,6 @@
 <body>
   <canvas id="game"></canvas>
   <script>
-
-    function generateColor() {
-      return '#' + Math.floor(Math.random() * 16777215).toString(16)
-    }
-
     class Game {
       constructor() {
         this.cellSize = 10
@@ -24,17 +19,32 @@
         this.cellNumberY = 100
         this.canvas = document.getElementById('game')
         this.ctx = this.canvas.getContext('2d')
+        this.area = Array(this.cellNumberX).fill(false).map(() => Array(this.cellNumberY).fill(false));
       }
 
       init() {
         this.canvas.setAttribute("width", this.cellNumberX * this.cellSize)
         this.canvas.setAttribute("height", this.cellNumberY * this.cellSize)
+        const initCellProbability =  0.25
+        for (let x = 0; x < this.cellNumberX; x++) {
+          for (let y = 0; y < this.cellNumberY; y++) {
+            if (Math.random() < initCellProbability) {
+              this.area[x][y] = true
+            }
+          }
+        }
+      }
+
+      update() {
+
       }
 
       draw() {
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
-            this.drawCell(x, y)
+            if (this.area[x][y]) {
+              this.drawCell(x, y)
+            }
           }
         }
       }
@@ -42,8 +52,6 @@
       drawCell(x, y) {
         this.ctx.fillStyle = 'black'
         this.ctx.fillRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize)
-        this.ctx.fillStyle = generateColor()
-        this.ctx.fillRect(x * this.cellSize + 1, y * this.cellSize + 1, this.cellSize - 1, this.cellSize - 1)
       }
     }
 
