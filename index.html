@@ -25,7 +25,7 @@
       init() {
         this.canvas.setAttribute("width", this.cellNumberX * this.cellSize)
         this.canvas.setAttribute("height", this.cellNumberY * this.cellSize)
-        const initCellProbability =  0.25
+        const initCellProbability = 0.25
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
             if (Math.random() < initCellProbability) {
@@ -39,11 +39,41 @@
 
       }
 
+      countNeighbours(x, y) {
+        const neighboursDiff = [
+          { 'x': -1, 'y': -1 },
+          { 'x': 0, 'y': -1 },
+          { 'x': 1, 'y': -1 },
+
+          { 'x': -1, 'y': 0 },
+          { 'x': 1, 'y': 0 },
+
+          { 'x': -1, 'y': 1 },
+          { 'x': 0, 'y': 1 },
+          { 'x': 1, 'y': 1 },
+        ]
+        const neighboursCount = neighboursDiff
+          .map((diff) => {
+            const neighbourX = x + diff.x
+            const neighbourY = y + diff.y
+            if (neighbourX < 0) return false
+            if (neighbourX >= this.cellNumberX) return false
+            if (neighbourY < 0) return false
+            if (neighbourY >= this.cellNumberY) return false
+            return this.area[neighbourX][neighbourY]
+          })
+          .filter(it => it)
+          .length
+
+        return neighboursCount
+      }
+
       draw() {
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
             if (this.area[x][y]) {
               this.drawCell(x, y)
+              console.log(this.countNeighbours(x, y))
             }
           }
         }
