@@ -11,33 +11,48 @@
 
 <body>
   <canvas id="game"></canvas>
+
+  <style>
+    html {
+      overflow: hidden;
+    }
+
+    body {
+      margin: 0pt;
+    }
+  </style>
+
   <script>
     class Game {
       constructor() {
         this.cellSize = 10
-        this.cellNumberX = 100
-        this.cellNumberY = 100
-        this.canvasWidth = this.cellNumberX * this.cellSize
-        this.canvasHeight = this.cellNumberY * this.cellSize
+        this.initCellProbability = 0.3
+        this.updateInterval = 100
         this.canvas = document.getElementById('game')
+        this.canvas.width = window.innerWidth
+        this.canvas.height = window.innerHeight
+        this.cellNumberX = Math.floor(this.canvas.width / this.cellSize)
+        this.cellNumberY = Math.floor(this.canvas.height / this.cellSize)
         this.ctx = this.canvas.getContext('2d')
         this.area = Array(this.cellNumberX).fill(false).map(() => Array(this.cellNumberY).fill(false))
-      }
-
-      init() {
-        this.canvas.setAttribute("width", this.canvasWidth)
-        this.canvas.setAttribute("height", this.canvasHeight)
-        const initCellProbability = 0.3
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
-            if (Math.random() < initCellProbability) {
+            if (Math.random() < this.initCellProbability) {
               this.area[x][y] = true
             }
           }
         }
       }
 
-      update() {
+      start() {
+        setInterval(() => {
+          game.updateArea()
+          game.clear()
+          game.draw()
+        }, this.updateInterval);
+      }
+
+      updateArea() {
         const newArea = Array(this.cellNumberX).fill(false).map(() => Array(this.cellNumberY).fill(false))
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
@@ -85,9 +100,12 @@
         return neighboursCount
       }
 
-      draw() {
+      clear() {
         this.ctx.fillStyle = 'white'
-        this.ctx.fillRect(0, 0, this.canvasHeight, this.canvasWidth)
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+      }
+
+      draw() {
         for (let x = 0; x < this.cellNumberX; x++) {
           for (let y = 0; y < this.cellNumberY; y++) {
             if (this.area[x][y]) {
@@ -104,11 +122,7 @@
     }
 
     const game = new Game()
-    game.init()
-    setInterval(() => {
-      game.update()
-      game.draw()
-    }, 100);
+    game.start()
   </script>
 </body>
 
